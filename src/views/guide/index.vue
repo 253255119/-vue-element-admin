@@ -1,34 +1,45 @@
 <template>
-  <div class="app-container">
-    <p class="warn-content">
-      {{ $t('guide.description') }}
-      <a href="https://github.com/kamranahmedse/driver.js" target="_blank">driver.js.
-      </a>
-    </p>
-    <el-button icon="el-icon-question" type="primary" @click.prevent.stop="guide">{{ $t('guide.button') }}</el-button>
-  </div>
+  <el-form>
+    <el-form-item>
+      <el-input v-model="input" placeholder="请输入内容"></el-input>
+      <el-form-item label="数据内容" prop="configContent">
+        <vue-json-editor
+          style="height: 300px"
+          v-model="jsonEditorValue"
+          :showBtns="false"
+          :mode="'code'"
+          lang="zh"
+        />
+      </el-form-item>
+      <el-button type="primary" @click="onSubmit">查询</el-button>
+      <p>{{ redisStr1 }}</p >
+    </el-form-item>
+  </el-form>
 </template>
-
 <script>
-import Driver from 'driver.js' // import driver.js
-import 'driver.js/dist/driver.min.css' // import driver.js css
-import steps from './defineSteps'
-
+import vueJsonEditor from "vue-json-editor";
+import { logout ,logout1} from "@/api/requestFF.js";
 export default {
-  name: 'Guide',
+  name: "PagePermission",
+  components: { vueJsonEditor },
   data() {
     return {
-      driver: null
-    }
-  },
-  mounted() {
-    this.driver = new Driver()
+      input: "asdasd",
+      redisStr1: "credit_userid_",
+      jsonEditorValue: {
+        redisStr1: "credit_userid_",
+      },
+    };
   },
   methods: {
-    guide() {
-      this.driver.defineSteps(steps)
-      this.driver.start()
-    }
-  }
-}
+    onSubmit() {
+      logout1(this.input).then((res) => {
+        console.log("ssssssssssssssssssss")
+        this.redisStr1 = res.data;
+                console.log(res)
+
+      });
+    },
+  },
+};
 </script>
